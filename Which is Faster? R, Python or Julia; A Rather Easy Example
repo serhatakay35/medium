@@ -1,0 +1,90 @@
+### R code:
+
+dice <- c(1,2,3,4,5,6)
+count <- 1
+result <- c()
+overall_mean <-c()
+n_ <- function(n){
+  while(count<=n){
+    result <<-append(result,sample(dice,1),after=1)
+    count<<-count+1
+    overall_mean<<-c(overall_mean,(sum(result)/(count+0)))
+  }
+}
+n_(199)
+
+plot(1:length(overall_mean),overall_mean,type="l")
+
+time_elapsed <- c()
+for(i in 1:1000){
+  start <- Sys.time()
+  n_(sample(1e4,1))
+  time_elapsed<<-c(time_elapsed,Sys.time()-start)
+}
+
+
+mean(time_elapsed)
+
+### Python code:
+
+dice=[1,2,3,4,5,6]
+
+from random import sample
+
+count=0
+result=[]
+overall_mean=[]
+def n_(n):
+    global result
+    global count
+    while count<n:
+      result.append(sample(dice,1)[0])         
+      count=count+1
+      overall_mean.append(sum(result)/(count+1))
+n_(199)
+
+from matplotlib import pyplot as plt
+plt.plot(list(range(1,len(overall_mean)+1)),overall_mean)
+plt.show()
+
+import time
+
+time_elapsed=[]
+for i in range(1,1000):
+  start=float(time.time())
+  n_(sample(list(range(1,int(1e4))),1)[0])
+  time_elapsed.append(float(time.time())-start)
+
+
+import numpy as np
+np.array(time_elapsed).mean()
+
+### Julia code:
+
+dice=[1,2,3,4,5,6]
+
+count=0
+result=[]
+overall_mean=[]
+function n_(n)
+    while count<n
+      push!(result,rand(dice))
+      global count+=1
+          #  global mean=sum(result)/(count+1)
+      push!(overall_mean,sum(result)/(count+1))
+    end
+end
+n_(199)
+
+using Plots
+plot(1:size(overall_mean)[1],overall_mean,legend=false)
+
+using BenchmarkTools
+time_elapsed=[]
+for n_of_times in 1:1000
+  time=@belapsed n_(rand(1:1e4))
+  append!(time_elapsed,time)
+end
+
+using StatsBase
+mean(time_elapsed)
